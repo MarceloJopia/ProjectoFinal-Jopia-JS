@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <script src="js/script.js" defer></script>
+    <title>Tienda de Juegos</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li>
+                    <a href="#">Productos</a>
+                </li>
+                <li>
+                    <a href="#carrito">Carro de compras</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>Bienvenido a la Tienda de Juegos</h1>
+        <!-- filtros de productos -->
+        <div class="listaFiltros">
+            <h2>Filtros/Categorias</h2>
+            <div>
+                <input type="checkbox" name="pc" id="checkbox1" class="checkboxFiltros">
+                <label for="pc">PC</label>
+            </div>
+            <div>
+                <input type="checkbox" name="nintendo" id="nintendo" class="checkboxFiltros">
+                <label for="nintendo">Nintendo</label>
+            </div>
+            <div>
+                <input type="checkbox" name="ps" id="ps" class="checkboxFiltros">
+                <label for="play-s">Playstation</label>
+            </div>
+            <div>
+                <input type="checkbox" name="xbox" id="xbox" class="checkboxFiltros">
+                <label for="xbox">XBOX</label>
+            </div>
+            <div>
+                <input type="checkbox" name="mesa" id="mesa" class="checkboxFiltros">
+                <label for="j-mesa">Juegos de mesa</label>
+            </div>
+            <div>
+                <input type="checkbox" name="consolas" id="consolas" class="checkboxFiltros">
+                <label for="consolas">Consolas</label>
+            </div>
+            <div>
+                <input type="checkbox" name="otros" id="otros" class="checkboxFiltros">
+                <label for="articulos">Accesorios/Otros</label>
+            </div>
+        </div>
+        <!-- Productos -->
+        <div>
+            <h2>Productos</h2>
+        </div>
+        <div class="catalogo">
+        </div>
+        <div id="carrito">
+            <h1>Carrito de Compras</h1>
+            <div class="tituloCarrito">
+                <b>Nombre</b>
+                <b>Cantidad</b>
+                <b>Precio</b>
+            </div>
+            <div class="listaCarrito">
+            </div>
+            <div class="calcTotal">
+                <b></b>
+                <b></b>
+                <b class="precioTotal">Precio</b>
+            </div>
+        </div>
+    </main>
+    <footer></footer>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</html>
