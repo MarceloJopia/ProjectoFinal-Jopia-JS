@@ -103,3 +103,14 @@ main{
     margin: 0px 10px 50px 10px;
     padding: 5px;
 }
+
+.btnCantidadCarrito{
+    height: 20px;
+    width: 20px;
+    margin-left: 5px;
+}
+
+.flexProductoCarrito{
+    display: flex;
+    align-items: center;
+}

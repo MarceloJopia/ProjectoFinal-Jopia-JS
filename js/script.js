@@ -1,19 +1,9 @@
-// Array de obj (listo)
-// Funciones y condicionales (listo)
-// Dom y eventos (listo)
-// Sintaxis avanzada (?)
-// Uso de 1 libreria pequeña (X)
-// Promesas con "FETCH"
-// cargar datos desde JSON [local] o desde una API (listo)
-//
-//
-//
 let productos
 const filtros = {pc:false, nintendo:false, ps:false, xbox:false, mesa:false, consolas:false, otros:false}
 
 fetch('/proyectoFinal/js/productos.json')
     .then ((resp) => resp.json())
-    .then( (data) => {
+    .then ((data) => {
         productos = data
         dibujarCatalogo(productos)
         console.log(data)
@@ -27,19 +17,20 @@ checkboxList.forEach((checkbox)=>{
         const checkboxName = checkbox.name
         filtros[checkboxName] = checkbox.checked
         console.log(filtros)
-        const productosFiltrados = filtrarProductos()
-        if (productosFiltrados.length == 0){
-            dibujarCatalogo(productos)
-        }
-        else{
-            dibujarCatalogo(productosFiltrados)
-        }
+        filtrarProductos().then((productosFiltrados)=>{
+            if (productosFiltrados.length == 0){
+                dibujarCatalogo(productos)
+            }
+            else{
+                dibujarCatalogo(productosFiltrados)
+            }
+        })
+        
     })
 })
 
 dibujarCarrito()
 calcTotal()
-
 
 function filtrarProductos(){
     const productosFiltrados = []
@@ -50,7 +41,9 @@ function filtrarProductos(){
             }
         })
     })
-    return productosFiltrados
+    return new Promise ((resolve)=>{
+        setTimeout(()=>(resolve(productosFiltrados)),250)
+    })
 }
 
 function dibujarCatalogo(listaProductos){
@@ -82,41 +75,56 @@ function activarEventoBoton(listaProductos){
     botonesProductos.forEach((boton, index)=>{
         boton.addEventListener('click',()=>{
             agregarCarrito(listaProductos[index])
-            Toastify({
-                text: "Se ha agregado al Carrito",
-                duration: 4000,
-                destination: "#carrito",
-                newWindow: false,
-                close: true,
-                gravity: "bottom",
-                position: "right",
-                style: {
-                  background: "linear-gradient(to right, #00b09b, #96c93d)",
-                },
-                onClick: function(){}
-              }).showToast();
         })
     })
     console.log({botonesProductos})
 }
-
+// {"nombre": "Nintendo Switch", "valor": 300000, "stock": 17, "id": "1", "categoria":["nintendo","consolas"]},
 function agregarCarrito(item){
-    let carrito = []
-    const carritoCreado = localStorage.getItem('carrito')
-    if(!carritoCreado){
-        localStorage.setItem('carrito', JSON.stringify(carrito))
+    console.log(item, "carrito")
+    const carrito = JSON.parse(localStorage.getItem('carrito'))
+    const indexEnCarrito = carrito.findIndex(productoCarrito => {
+        return productoCarrito.id == item.id
+    })
+    if(indexEnCarrito<0){
+        item.cantidad = 1
+        carrito.push(item)
+        alertaAgregarCarrito()
+    }
+    else if (carrito[indexEnCarrito].cantidad<carrito[indexEnCarrito].stock){
+        carrito[indexEnCarrito].cantidad++
+        alertaAgregarCarrito()
+        
     }
     else{
-        carrito = JSON.parse(localStorage.getItem('carrito'))
+        noHayStock()
     }
-    carrito.push(item)
     localStorage.setItem('carrito', JSON.stringify(carrito))
-    console.log(carrito)
+    dibujarCarrito()
+}
+
+function quitarCarrito(item){
+    console.log(item, "carrito")
+    let carrito = JSON.parse(localStorage.getItem('carrito'))
+    const indexEnCarrito = carrito.findIndex(productoCarrito => {
+        return productoCarrito.id == item.id
+    })
+    if (carrito[indexEnCarrito].cantidad>1){
+        carrito[indexEnCarrito].cantidad--
+        alertaQuitarCarrito()
+        
+    }
+    else{
+        carrito = carrito.filter((producto) => producto.id!=item.id)
+        alertaQuitarCarrito()
+    }
+    localStorage.setItem('carrito', JSON.stringify(carrito))
+    dibujarCarrito()
 }
 
 function dibujarCarrito(){
     const listaCarrito = document.querySelector('.listaCarrito')
-    console.log(listaCarrito)
+    listaCarrito.innerHTML=""
     let productosCarrito = JSON.parse(localStorage.getItem('carrito'))
     if (!productosCarrito){
         localStorage.setItem('carrito', JSON.stringify([]))
@@ -133,20 +141,31 @@ function dibujarCarrito(){
     else{
         for(let producto of productosCarrito){
             const nombreProducto = document.createElement("b")
-            const stockProducto = document.createElement("p")
+            const cantidadProducto = document.createElement("p")
+            const botonSumarCantidad = document.createElement("button")
+            const botonRestarCantidad = document.createElement("button")
             const precioProducto = document.createElement("p")
             const card = document.createElement("div")
             card.classList.add("cardCarrito")
+            botonRestarCantidad.className="btnCantidadCarrito"
+            botonSumarCantidad.className="btnCantidadCarrito"
+            cantidadProducto.className="flexProductoCarrito"
             nombreProducto.innerHTML = producto.nombre
-            stockProducto.innerHTML = "Stock Disponible: "+producto.stock
-            precioProducto.innerHTML = "Precio: "+producto.valor+" CLP"
+            cantidadProducto.innerHTML = "Cantidad Disponible: "+producto.cantidad
+            botonSumarCantidad.innerHTML = '+'
+            botonRestarCantidad.innerHTML = '-'
+            precioProducto.innerHTML = "Precio: "+producto.valor*producto.cantidad+" CLP"
+            botonSumarCantidad.addEventListener('click', () => agregarCarrito(producto))
+            botonRestarCantidad.addEventListener('click', () => quitarCarrito(producto))
             card.appendChild(nombreProducto)
-            card.appendChild(stockProducto)
+            card.appendChild(cantidadProducto)
             card.appendChild(precioProducto)
+            cantidadProducto.appendChild(botonRestarCantidad)
+            cantidadProducto.appendChild(botonSumarCantidad)
             listaCarrito.appendChild(card)
         }  
     }
-    console.log(productosCarrito)
+    calcTotal()
 }
 
 function calcTotal(){
@@ -154,29 +173,53 @@ function calcTotal(){
     let productosSeleccionados = JSON.parse(localStorage.getItem('carrito'))
     const preciosSeleccionados = []
     productosSeleccionados.forEach((producto)=>{
-        console.log(producto.valor)
-        preciosSeleccionados.push(producto.valor)
+        preciosSeleccionados.push(producto.valor*producto.cantidad)
     })
     let total = Number()
     for(let precio of preciosSeleccionados){
         total+=precio
     }
     calcTotal.innerHTML = 'Total: '+total+' CLP'
-    console.log(calcTotal)
 }
 
-// Alertas realizar compra o compra fallida
+function alertaAgregarCarrito(){
+    Toastify({
+        text: "Se ha agregado un producto al Carrito",
+        duration: 3500,
+        destination: "#carrito",
+        newWindow: false,
+        close: true,
+        gravity: "bottom",
+        position: "right",
+        style: {
+          background: "linear-gradient(to right, #00b09b, #96c93d)",
+        },
+        onClick: function(){}
+      }).showToast();
+}
 
-// Swal.fire({
-//     title: 'Tu compra se realizo Correctamente',
-//     icon: 'success',
-//     confirmButtonText: 'Volver'
-//   })
+function alertaQuitarCarrito(){
+    Toastify({
+        text: "Se ha quitado un producto del Carrito",
+        duration: 3500,
+        destination: "#carrito",
+        newWindow: false,
+        close: true,
+        gravity: "bottom",
+        position: "right",
+        style: {
+          background: "linear-gradient(90deg, rgba(208,56,112,1) 15%, rgba(255,149,0,1) 100%)",
+        },
+        onClick: function(){}
+      }).showToast();
+}
 
 
-//   Swal.fire({
-//     title: 'No se pudo realizar tu compra',
-//     text: 'Revisa que todo este correcto o contactanos',
-//     icon: 'error',
-//     confirmButtonText: 'Volver'
-//   })
+function noHayStock(){
+    Swal.fire({
+        title: 'No hay mas stock de este Producto',
+        text: 'Te invitamos a revisar otros de nuestros productos',
+        icon: 'error',
+        confirmButtonText: 'Volver'
+        })
+}
