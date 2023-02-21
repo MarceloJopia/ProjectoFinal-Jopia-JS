@@ -1,0 +1,14 @@
+[
+    {"nombre": "Nintendo Switch", "valor": 300000, "stock": 17, "id": "1", "categoria":["nintendo","consolas"]},
+    {"nombre": "Playstation 5", "valor": 800000, "stock": 15 , "id": "2", "categoria":["ps","consolas"]},
+    {"nombre": "Xbox Series X", "valor": 550000, "stock": 12 , "id": "3", "categoria":["xbox","consolas"]},
+    {"nombre": "Pokemon Escarlata", "valor": 55000, "stock": 7, "id": "4", "categoria":["nintendo"]},
+    {"nombre": "Mario Party", "valor": 55000, "stock": 22, "id": "5", "categoria":["nintendo"]},
+    {"nombre": "God of War Ragnarok (PS5)", "valor": 65000, "stock": 13, "id": "6", "categoria":["consolas"]},
+    {"nombre": "Halo Infinite (XBOX)", "valor": 50000, "stock": 3, "id": "7", "categoria":["xbox"]},
+    {"nombre": "Switch Controller (Control Nintendo)", "valor": 90000, "stock": 29, "id": "8", "categoria":["nintendo","otros"]},
+    {"nombre": "Control Xbox", "valor": 35000, "stock": 24, "id": "9", "categoria":["xbox","otros"]},
+    {"nombre": "Elden Ring (PC)", "valor": 45000, "stock": 7, "id": "10", "categoria":["pc"]},
+    {"nombre": "Elden Ring (PS5)", "valor": 55000, "stock": 10, "id": "11", "categoria":["ps"]},
+    {"nombre": "Catan - El Juego", "valor": 25000, "stock": 15, "id": "12", "categoria":["mesa"]}
+]
