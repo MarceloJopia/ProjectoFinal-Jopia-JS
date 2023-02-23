@@ -8,7 +8,6 @@ fetch('/proyectoFinal/js/productos.json')
         dibujarCatalogo(productos)
         console.log(data)
     })
-
     
 let checkboxList = document.querySelectorAll(".checkboxFiltros")
 checkboxList.forEach((checkbox)=>{
@@ -18,12 +17,13 @@ checkboxList.forEach((checkbox)=>{
         filtros[checkboxName] = checkbox.checked
         console.log(filtros)
         filtrarProductos().then((productosFiltrados)=>{
-            if (productosFiltrados.length == 0){
-                dibujarCatalogo(productos)
-            }
-            else{
-                dibujarCatalogo(productosFiltrados)
-            }
+            productosFiltrados.length == 0 ? dibujarCatalogo(productos) : dibujarCatalogo(productosFiltrados)
+            // if (productosFiltrados.length == 0){
+            //     dibujarCatalogo(productos)
+            // }
+            // else{
+            //     dibujarCatalogo(productosFiltrados)
+            // }
         })
         
     })
@@ -79,7 +79,7 @@ function activarEventoBoton(listaProductos){
     })
     console.log({botonesProductos})
 }
-// {"nombre": "Nintendo Switch", "valor": 300000, "stock": 17, "id": "1", "categoria":["nintendo","consolas"]},
+
 function agregarCarrito(item){
     console.log(item, "carrito")
     const carrito = JSON.parse(localStorage.getItem('carrito'))
@@ -112,7 +112,6 @@ function quitarCarrito(item){
     if (carrito[indexEnCarrito].cantidad>1){
         carrito[indexEnCarrito].cantidad--
         alertaQuitarCarrito()
-        
     }
     else{
         carrito = carrito.filter((producto) => producto.id!=item.id)
@@ -195,7 +194,7 @@ function alertaAgregarCarrito(){
           background: "linear-gradient(to right, #00b09b, #96c93d)",
         },
         onClick: function(){}
-      }).showToast();
+    }).showToast();
 }
 
 function alertaQuitarCarrito(){
@@ -211,7 +210,7 @@ function alertaQuitarCarrito(){
           background: "linear-gradient(90deg, rgba(208,56,112,1) 15%, rgba(255,149,0,1) 100%)",
         },
         onClick: function(){}
-      }).showToast();
+    }).showToast();
 }
 
 
@@ -221,5 +220,5 @@ function noHayStock(){
         text: 'Te invitamos a revisar otros de nuestros productos',
         icon: 'error',
         confirmButtonText: 'Volver'
-        })
+    })
 }
