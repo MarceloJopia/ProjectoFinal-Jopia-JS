@@ -18,14 +18,7 @@ checkboxList.forEach((checkbox)=>{
         console.log(filtros)
         filtrarProductos().then((productosFiltrados)=>{
             productosFiltrados.length == 0 ? dibujarCatalogo(productos) : dibujarCatalogo(productosFiltrados)
-            // if (productosFiltrados.length == 0){
-            //     dibujarCatalogo(productos)
-            // }
-            // else{
-            //     dibujarCatalogo(productosFiltrados)
-            // }
-        })
-        
+        }) 
     })
 })
 
